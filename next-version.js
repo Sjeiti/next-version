@@ -5,7 +5,6 @@
 
 var fs = require('fs')
     ,exec = require('child_process').exec
-    ,commander = require('commander')
     ,warn = console.warn.bind(console)
     //
     ,versionObject = {major:0,minor:1,patch:2}
@@ -20,30 +19,7 @@ var fs = require('fs')
         ,regex: /\d+\.\d+\.\d+-?[0-9A-Za-z-.]*\+?[0-9A-Za-z-.]*/
     }
     ,isBump
-    ,isCli = require.main===module
 ;
-
-if (isCli) {
-  commander
-    .usage('[options] <files ...>')
-    .option('-m, --major [major]', 'Bump or set major version')
-    .option('-i, --minor [minor]', 'Bump or set minor version')
-    .option('-p, --patch [patch]', 'Bump or set patch version')
-    .option('-v, --version [version]', 'Set the full version number')
-    .option('-b, --build [build]', 'The build number')
-    .option('-g, --git', 'Git revision number as build number')
-    .option('-r, --regex [regex]', 'Regex to find version number with')
-    .parse(process.argv);
-
-  //for (var s in commander) (typeof commander[s]!=='function'&&s.substr(0,1)!=='_')&&console.log('commander',s,commander[s]); // todo: remove log
-  var files = commander.args
-      ,options = {}
-  ;
-  for (var s in defaultOptions) {
-    if (commander.hasOwnProperty(s)) options[s] = commander[s];
-  }
-  version(files,options,()=>{});
-}
 
 function version(files,options,callback){
   if (callback===undefined) callback = options;
@@ -236,4 +212,5 @@ function isBool(o){
   return o===true||o===false;
 }
 
+version.defaultOptions = defaultOptions;
 module.exports = version;
