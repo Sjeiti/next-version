@@ -3,43 +3,52 @@
  * node task/version major=1 minor
  */
 
-/*
-  One reason for continuing to use the single letter options is because they can be strung together: ls -ltr is a lot easier to type than ls --sort=time --reverse --format=long. There are a number of times when both are good to use. As for searching for this topic, try "unix command line options convention".
-*/
-
 var fs = require('fs')
-  ,exec = require('child_process').exec
-  ,commander = require('commander')
-  //
-  ,versionObject = {major:0,minor:1,patch:2}
-  ,defaultOptions = {
-      major: false
-      ,minor: false
-      ,patch: false
-      ,version: false
-      ,build: 'num'//||hash
-      ,git: false
-      ,gitRevision: false
-      ,regex: /\d+\.\d+\.\d+-?[0-9A-Za-z-.]*\+?[0-9A-Za-z-.]*/
-  }
-  ,isBump
+    ,exec = require('child_process').exec
+    ,commander = require('commander')
+    ,warn = console.warn.bind(console)
+    //
+    ,versionObject = {major:0,minor:1,patch:2}
+    ,defaultOptions = {
+        major: false
+        ,minor: false
+        ,patch: false
+        ,version: false
+        ,build: 'num'//||hash
+        ,git: false
+        ,gitRevision: false
+        ,regex: /\d+\.\d+\.\d+-?[0-9A-Za-z-.]*\+?[0-9A-Za-z-.]*/
+    }
+    ,isBump
+    ,isCli = require.main===module
 ;
 
-commander
-  .option('-m, --major', 'Bump or set major version')
-  .option('-i, --minor', 'Bump or set minor version')
-  .option('-p, --patch', 'Bump or set patch version')
-  .option('-v, --version [version]', 'The full version number')
-  .option('-b, --build [build]', 'The build number')
-  .option('-g, --git', 'Git revision number as build number')
-  .option('-r, --regex', 'Regex to find version number with')
-  .parse(process.argv);
-for (var s in commander) (typeof commander[s]!=='function'&&s.substr(0,1)!=='_')&&console.log('commander',s,commander[s]); // todo: remove log
+if (isCli) {
+  commander
+    .usage('[options] <files ...>')
+    .option('-m, --major [major]', 'Bump or set major version')
+    .option('-i, --minor [minor]', 'Bump or set minor version')
+    .option('-p, --patch [patch]', 'Bump or set patch version')
+    .option('-v, --version [version]', 'Set the full version number')
+    .option('-b, --build [build]', 'The build number')
+    .option('-g, --git', 'Git revision number as build number')
+    .option('-r, --regex [regex]', 'Regex to find version number with')
+    .parse(process.argv);
 
+  //for (var s in commander) (typeof commander[s]!=='function'&&s.substr(0,1)!=='_')&&console.log('commander',s,commander[s]); // todo: remove log
+  var files = commander.args
+      ,options = {}
+  ;
+  for (var s in defaultOptions) {
+    if (commander.hasOwnProperty(s)) options[s] = commander[s];
+  }
+  version(files,options,()=>{});
+}
 
 function version(files,options,callback){
   if (callback===undefined) callback = options;
   options = Object.assign({},defaultOptions,options||{});
+  //console.log('options',options); // todo: remove log
 
   process.argv.slice(2).forEach(s=>{
     var split = s.split('=');
@@ -69,7 +78,8 @@ function version(files,options,callback){
 function iterateFiles(files,options,gitRevision){
   var highestVersion = '0.0.0'
       ,highestVersionNumeral = 0
-      ,processedFiles = [];
+      ,processedFiles = []
+      /*,msgs = []*/;
   files.forEach(src=>{
     var source = fs.readFileSync(src).toString()
         ,version
@@ -145,9 +155,9 @@ function iterateFiles(files,options,gitRevision){
         source = replaceSource(source,options.regex,versionNew);
       }
       fs.writeFileSync(src,source);
-      console.log('File \''+src+'\' updated from',version,'to',versionNew);
-    } else {
-      console.log('File \''+src+'\' is up to date',version);
+      //console.log('File \''+src+'\' updated from',version,'to',versionNew);
+    //} else {
+      //console.log('File \''+src+'\' is up to date',version);
     }
   });
 }

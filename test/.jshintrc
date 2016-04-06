@@ -1,5 +1,11 @@
 {
-  "globals": {},
+  "globals": {
+    "run": true,
+    "describe": true,
+    "beforeEach": true,
+    "it": true,
+    "afterEach": true
+  },
   "esnext": true,
   "browser": true,
   "node": true,

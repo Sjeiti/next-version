@@ -3,6 +3,7 @@ var assert = require('assert')
     ,mkdirp = require('mkdirp')
     ,warn = console.warn.bind(console)
     ,childProcess = require('child_process')
+    ,exec = childProcess.exec
     ,tempRoot = './temp/'
     ,files = [
       ['foo.js','0.1.0']
@@ -16,38 +17,34 @@ var assert = require('assert')
     ,version = require(__dirname+'/../next-version.js')
 ;
 
-//Promise.all([Promise.resolve(),Promise.resolve()])
-//    .then(console.log.bind(console,'oh'));
-/*setup()
-      .then(read.bind(null,files[0].path))
-      .then(console.log.bind(console,'a'),console.warn.bind(console,'b'));*/
-/*setup()
-  .then(()=>{
-    version(files.map(file=>file.path));
-  })
-  .then(teardown)
-  .then(()=>mkdirp(tempRoot,run))
-;*/
-
 mkdirp(tempRoot,run);
 
-//for (var s in assert) warn(s);
-
-describe('Array', function() {
+describe('Module', function() {
   beforeEach(setup);
-  describe('#indexOf()', function () {
-    it('should return -1 when the value is not present', function () {
-      assert.equal(-1, [1,2,3].indexOf(5));
-      assert.equal(-1, [1,2,3].indexOf(0));
-    });
+  describe('bump', function () {
     it('should load a file', function(done) {
-      read(tempRoot+'foo.js')
+      read(files[0].path)
           .then(contents=>assert.equal(contents,'0.1.0'))
           .then(done);
     });
     it('should bump to 1.0.2', function(done) {
       version(files.map(file=>file.path),err=>{
-        assert.equal(!!err,false)
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.0.2')),warn)
+          .then(done);
+      });
+    });
+  });
+  afterEach(teardown);
+});
+
+describe('CLI', function() {
+  beforeEach(setup);
+  describe('bump', function () {
+    it('should bump to 1.0.2', function(done) {
+      exec('node next-version '+files.  map(file=>file.path).join(' '),err=>{
+        assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
           .then(results=>results.forEach(result=>assert.equal(result,'1.0.2')),warn)
           .then(done);
@@ -82,22 +79,3 @@ function read(file) {
     fs.readFile(file, (err,data)=>err&&reject(err)||resolve(data.toString()));
   });
 }
-
-/*
-function runScript(scriptPath) {
-	return new Promise(function(resolve,reject){
-    var invoked = false
-        ,process = childProcess.fork(scriptPath);
-    process.on('error',err=>{
-        if (invoked) return;
-        invoked = true;
-        reject(err);
-    });
-    process.on('exit',code=>{
-        if (invoked) return;
-        invoked = true;
-        var err = code === 0 ? null : new Error('exit code ' + code);
-        resolve(err);
-    });
-	});
-}*/

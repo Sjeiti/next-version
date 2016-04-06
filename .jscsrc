@@ -1,6 +1,6 @@
 {
-	"disallowCommaBeforeLineBreak":true
-	,"disallowEmptyBlocks":true
+	/*"disallowCommaBeforeLineBreak":true
+	,*/"disallowEmptyBlocks":true
 	,"disallowKeywordsOnNewLine": ["else"]
 	,"disallowMixedSpacesAndTabs": true
 	,"disallowMultipleLineBreaks": true
