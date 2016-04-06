@@ -1,0 +1,40 @@
+{
+  "name": "next-version",
+  "main": "next-version.js",
+  "filename": "next-version.js",
+  "version": "0.9.1",
+  "description": "Imcrement version on multiple files",
+  "license": "MIT",
+  "homepage": "http://next-version.sjeiti.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sjeiti/next-version.git"
+  },
+  "author": {
+    "name": "Ron Valstar",
+    "email": "ron@ronvalstar.nl",
+    "url": "http://ronvalstar.nl/"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "dependencies": {
+    "commander": "^2.9.0"
+  },
+  "devDependencies": {
+    "jscs": "^2.11.0",
+    "mkdirp": "^0.5.1",
+    "mocha": "^2.4.5",
+    "promisify-node": "^0.4.0"
+  },
+  "scripts": {
+    "test": "mocha ./test/test.js --delay",
+    "jscs": "jscs ./next-version.js",
+    "jshint": "jshint ./next-version.js"
+  },
+  "readme": "",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/Sjeiti/next-version/issues"
+  }
+}
