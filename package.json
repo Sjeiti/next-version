@@ -2,7 +2,10 @@
   "name": "next-version",
   "main": "next-version.js",
   "filename": "next-version.js",
-  "version": "0.9.1",
+  "bin": {
+    "next-version": "next-version.js"
+  },
+  "version": "0.9.2",
   "description": "Imcrement version on multiple files",
   "license": "MIT",
   "homepage": "http://next-version.sjeiti.com/",
