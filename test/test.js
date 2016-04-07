@@ -25,11 +25,6 @@ mkdirp(tempRoot,run);
 describe('Module', function() {
   beforeEach(setup);
   describe('bump', function () {
-    it('should load a file', function(done) {
-      read(files[0].path)
-          .then(contents=>assert.equal(contents,'0.1.0'))
-          .then(done,done);
-    });
     it('should bump patch to 1.0.2', function(done) {
       version(paths,err=>{
         assert.equal(!!err,false);
@@ -38,6 +33,50 @@ describe('Module', function() {
           .then(done,done);
       });
     });
+    it('should bump minor to 1.1.0', function(done) {
+      version(paths,{minor:true},err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.1.0')),warn)
+          .then(done,done);
+      });
+    });
+    it('should bump major to 2.0.0', function(done) {
+      version(paths,{major:true},err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'2.0.0')),warn)
+          .then(done,done);
+      });
+    });
+  });
+  describe('set', function () {
+    it('should set patch to 1.0.8', function(done) {
+      version(paths,{patch:8},err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.0.8')),warn)
+          .then(done,done);
+      });
+    });
+    it('should set minor to 1.3.1', function(done) {
+      version(paths,{minor:3},err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.3.1')),warn)
+          .then(done,done);
+      });
+    });
+    /*it('should set major to 4.0.1', function(done) {
+      version(paths,{major:4},err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'4.0.1')),warn)
+          .then(done,done);
+      });
+    });*/
+  });
+  describe('build', function () {
     it('should set release to 1.0.1-alpha', function(done) {
       version(paths,{release:'alpha'},err=>{
         assert.equal(!!err,false);

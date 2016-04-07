@@ -5,7 +5,7 @@
   "bin": {
     "next-version": "bin.js"
   },
-  "version": "0.1.1",
+  "version": "0.10.1",
   "description": "Imcrement version on multiple files",
   "license": "MIT",
   "homepage": "http://next-version.sjeiti.com/",
