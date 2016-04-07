@@ -5,8 +5,9 @@ var assert = require('assert')
     ,childProcess = require('child_process')
     ,exec = childProcess.exec
     ,tempRoot = './temp/'
+    ,cliLocal = 'node bin.js '
     ,files = [
-      ['foo.js','0.1.0']
+      ['foo.txt','0.1.0']
       ,['bar.txt','0.8.2']
       ,['baz.txt','1.0.1']
     ].map(file=>({
@@ -14,6 +15,8 @@ var assert = require('assert')
       ,path: tempRoot+file[0]
       ,contents: file[1]
     }))
+    ,paths = files.map(file=>file.path)
+    ,pathsJoined = paths.join(' ')
     ,version = require(__dirname+'/../next-version.js')
 ;
 
@@ -25,14 +28,22 @@ describe('Module', function() {
     it('should load a file', function(done) {
       read(files[0].path)
           .then(contents=>assert.equal(contents,'0.1.0'))
-          .then(done);
+          .then(done,done);
     });
-    it('should bump to 1.0.2', function(done) {
-      version(files.map(file=>file.path),err=>{
+    it('should bump patch to 1.0.2', function(done) {
+      version(paths,err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
           .then(results=>results.forEach(result=>assert.equal(result,'1.0.2')),warn)
-          .then(done);
+          .then(done,done);
+      });
+    });
+    it('should set release to 1.0.1-alpha', function(done) {
+      version(paths,{release:'alpha'},err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.0.1-alpha')),warn)
+          .then(done,done);
       });
     });
   });
@@ -42,12 +53,80 @@ describe('Module', function() {
 describe('CLI', function() {
   beforeEach(setup);
   describe('bump', function () {
-    it('should bump to 1.0.2', function(done) {
-      exec('node next-version '+files.  map(file=>file.path).join(' '),err=>{
+    it('should bump patch to 1.0.2', function(done) {
+      exec(cliLocal+pathsJoined,err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
           .then(results=>results.forEach(result=>assert.equal(result,'1.0.2')),warn)
-          .then(done);
+          .then(done,done);
+      });
+    });
+    it('should bump minor to 1.1.0', function(done) {
+      exec(cliLocal+pathsJoined+' -i',err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.1.0')),warn)
+          .then(done,done);
+      });
+    });
+    it('should bump major to 2.0.0', function(done) {
+      exec(cliLocal+pathsJoined+' -m',err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'2.0.0')),warn)
+          .then(done,done);
+      });
+    });
+  });
+  describe('set', function () {
+    it('should set patch to 1.0.8', function(done) {
+      exec(cliLocal+pathsJoined+' --patch=8',err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.0.8')),warn)
+          .then(done,done);
+      });
+    });
+    it('should set minor to 1.3.1', function(done) {
+      exec(cliLocal+pathsJoined+' --minor=3',err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.3.1')),warn)
+          .then(done,done);
+      });
+    });
+    /*it('should set major to 4.0.1', function(done) {
+      exec(cliLocal+pathsJoined+' --major=4',err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'4.0.1')),warn)
+          .then(done,done);
+      });
+    });*/
+  });
+  describe('build', function () {
+    /*it('should set release to 1.0.1-alpha', function(done) {
+      exec(cliLocal+pathsJoined+' --release="alpha"',err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.0.1-alpha')),warn)
+          .then(done,done);
+      });
+    });*/
+    it('should bump patch to 1.0.2+gitrevision', function(done) {
+      exec(cliLocal+pathsJoined+' -pg',err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal((/1\.0\.2\+\d+/).test(result),true)),warn)
+          .then(done,done);
+      });
+    });
+    it('should set build to 1.0.1+2345', function(done) {
+      exec(cliLocal+pathsJoined+' --build=2345',err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.0.1+2345')),warn)
+          .then(done,done);
       });
     });
   });

@@ -3,9 +3,9 @@
   "main": "next-version.js",
   "filename": "next-version.js",
   "bin": {
-    "next-version": "bin/next-version"
+    "next-version": "bin.js"
   },
-  "version": "0.9.3",
+  "version": "0.1.1",
   "description": "Imcrement version on multiple files",
   "license": "MIT",
   "homepage": "http://next-version.sjeiti.com/",
@@ -33,7 +33,8 @@
   "scripts": {
     "test": "mocha ./test/test.js --delay",
     "jscs": "jscs ./next-version.js",
-    "jshint": "jshint ./next-version.js"
+    "jshint": "jshint ./next-version.js",
+    "version": "node bin.js next-version.js package.json"
   },
   "readmeFilename": "README.md",
   "bugs": {

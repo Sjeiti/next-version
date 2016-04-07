@@ -1,8 +1,9 @@
-
 /**
+ * Next version
+ * @module next-version
+ * @version 0.1.1
  * node task/version major=1 minor
  */
-
 var fs = require('fs')
     ,exec = require('child_process').exec
     ,warn = console.warn.bind(console)
@@ -13,7 +14,8 @@ var fs = require('fs')
         ,minor: false
         ,patch: false
         ,version: false
-        ,build: 'num'//||hash
+        ,release: false
+        ,build: false
         ,git: false
         ,gitRevision: false
         ,regex: /\d+\.\d+\.\d+-?[0-9A-Za-z-.]*\+?[0-9A-Za-z-.]*/
@@ -21,7 +23,13 @@ var fs = require('fs')
     ,isBump
 ;
 
-function version(files,options,callback){
+/**
+ *
+ * @param {string[]} files
+ * @param {object} [options]
+ * @param {function} callback
+ */
+function nextVersion(files,options,callback){
   if (callback===undefined) callback = options;
   options = Object.assign({},defaultOptions,options||{});
   //console.log('options',options); // todo: remove log
@@ -32,7 +40,7 @@ function version(files,options,callback){
   });
 
   // if all options are false simply bump patch
-  if (options.major===false&&options.minor===false&&options.patch===false) {
+  if (options.major===false&&options.minor===false&&options.patch===false&&options.release===false&&options.build===false&&options.git===false) {
     options.patch = true;
   }
 
@@ -114,12 +122,12 @@ function iterateFiles(files,options,gitRevision){
       ,isRegexArray = Array.isArray(options.regex)
     ;
     // add release
-    /*if (isParamRelease) {
-      versionNew = versionNew+'-'+paramRelease;
-    }*/
+    if (options.release) {
+      versionNew = versionNew+'-'+options.release;
+    }
     // add build
-    if (options.git) {
-      versionNew = versionNew+'+'+gitRevision;
+    if (options.git||options.build) {
+      versionNew = versionNew+'+'+(options.build||gitRevision);
     }
     // save file
     if (versionNew!==version) {
@@ -212,5 +220,5 @@ function isBool(o){
   return o===true||o===false;
 }
 
-version.defaultOptions = defaultOptions;
-module.exports = version;
+nextVersion.defaultOptions = defaultOptions;
+module.exports = nextVersion;
