@@ -67,14 +67,14 @@ describe('Module', function() {
           .then(done,done);
       });
     });
-    /*it('should set major to 4.0.1', function(done) {
+    it('should set major to 4.0.1', function(done) {
       version(paths,{major:4},err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
           .then(results=>results.forEach(result=>assert.equal(result,'4.0.1')),warn)
           .then(done,done);
       });
-    });*/
+    });
   });
   describe('build', function () {
     it('should set release to 1.0.1-alpha', function(done) {
@@ -134,14 +134,14 @@ describe('CLI', function() {
           .then(done,done);
       });
     });
-    /*it('should set major to 4.0.1', function(done) {
+    it('should set major to 4.0.1', function(done) {
       exec(cliLocal+pathsJoined+' --major=4',err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
           .then(results=>results.forEach(result=>assert.equal(result,'4.0.1')),warn)
           .then(done,done);
       });
-    });*/
+    });
   });
   describe('build', function () {
     /*it('should set release to 1.0.1-alpha', function(done) {
