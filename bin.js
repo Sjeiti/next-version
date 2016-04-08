@@ -12,7 +12,7 @@ commander
   .option('-i, --minor [minor]', 'Bump or set minor version')
   .option('-p, --patch [patch]', 'Bump or set patch version')
   .option('-v, --version [version]', 'Set the full version number')
-  .option('-r, --release', 'Release version')
+  .option('-r, --release [release]', 'Release version')
   .option('-b, --build [build]', 'The build number')
   .option('-g, --git', 'Git revision number as build number')
   .option('-x, --regex [regex]', 'Regex to find version number with')

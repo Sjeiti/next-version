@@ -25,7 +25,7 @@ mkdirp(tempRoot,run);
 describe('Module', function() {
   beforeEach(setup);
   describe('bump', function () {
-    it('should bump patch to 1.0.2', function(done) {
+    it('should bump patch', function(done) {
       version(paths,err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -33,7 +33,7 @@ describe('Module', function() {
           .then(done,done);
       });
     });
-    it('should bump minor to 1.1.0', function(done) {
+    it('should bump minor', function(done) {
       version(paths,{minor:true},err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -41,7 +41,7 @@ describe('Module', function() {
           .then(done,done);
       });
     });
-    it('should bump major to 2.0.0', function(done) {
+    it('should bump major', function(done) {
       version(paths,{major:true},err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -51,7 +51,7 @@ describe('Module', function() {
     });
   });
   describe('set', function () {
-    it('should set patch to 1.0.8', function(done) {
+    it('should set patch', function(done) {
       version(paths,{patch:8},err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -59,7 +59,7 @@ describe('Module', function() {
           .then(done,done);
       });
     });
-    it('should set minor to 1.3.1', function(done) {
+    it('should set minor', function(done) {
       version(paths,{minor:3},err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -67,7 +67,7 @@ describe('Module', function() {
           .then(done,done);
       });
     });
-    it('should set major to 4.0.1', function(done) {
+    it('should set major', function(done) {
       version(paths,{major:4},err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -77,7 +77,7 @@ describe('Module', function() {
     });
   });
   describe('build', function () {
-    it('should set release to 1.0.1-alpha', function(done) {
+    it('should set release suffix', function(done) {
       version(paths,{release:'alpha'},err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -92,7 +92,7 @@ describe('Module', function() {
 describe('CLI', function() {
   beforeEach(setup);
   describe('bump', function () {
-    it('should bump patch to 1.0.2', function(done) {
+    it('should bump patch', function(done) {
       exec(cliLocal+pathsJoined,err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -100,7 +100,7 @@ describe('CLI', function() {
           .then(done,done);
       });
     });
-    it('should bump minor to 1.1.0', function(done) {
+    it('should bump minor', function(done) {
       exec(cliLocal+pathsJoined+' -i',err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -108,7 +108,7 @@ describe('CLI', function() {
           .then(done,done);
       });
     });
-    it('should bump major to 2.0.0', function(done) {
+    it('should bump major', function(done) {
       exec(cliLocal+pathsJoined+' -m',err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -118,7 +118,7 @@ describe('CLI', function() {
     });
   });
   describe('set', function () {
-    it('should set patch to 1.0.8', function(done) {
+    it('should set patch', function(done) {
       exec(cliLocal+pathsJoined+' --patch=8',err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -126,7 +126,7 @@ describe('CLI', function() {
           .then(done,done);
       });
     });
-    it('should set minor to 1.3.1', function(done) {
+    it('should set minor', function(done) {
       exec(cliLocal+pathsJoined+' --minor=3',err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -134,7 +134,7 @@ describe('CLI', function() {
           .then(done,done);
       });
     });
-    it('should set major to 4.0.1', function(done) {
+    it('should set major', function(done) {
       exec(cliLocal+pathsJoined+' --major=4',err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -144,15 +144,15 @@ describe('CLI', function() {
     });
   });
   describe('build', function () {
-    /*it('should set release to 1.0.1-alpha', function(done) {
-      exec(cliLocal+pathsJoined+' --release="alpha"',err=>{
+    it('should set release suffix', function(done) {
+      exec(cliLocal+pathsJoined+' --release=alpha',err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
           .then(results=>results.forEach(result=>assert.equal(result,'1.0.1-alpha')),warn)
           .then(done,done);
       });
-    });*/
-    it('should bump patch to 1.0.2+gitrevision', function(done) {
+    });
+    it('should add revision suffix and bump patch', function(done) {
       exec(cliLocal+pathsJoined+' -pg',err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
@@ -160,7 +160,7 @@ describe('CLI', function() {
           .then(done,done);
       });
     });
-    it('should set build to 1.0.1+2345', function(done) {
+    it('should set build suffix', function(done) {
       exec(cliLocal+pathsJoined+' --build=2345',err=>{
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))

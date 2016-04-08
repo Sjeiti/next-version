@@ -1,11 +1,10 @@
 /**
  * Next version
  * @module next-version
- * @version 0.10.2
+ * @version 0.11.0
  * node task/version major=1 minor
  */
 var fs = require('fs')
-    //
     ,defaultOptions = {
         major: false
         ,minor: false
