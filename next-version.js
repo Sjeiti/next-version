@@ -1,10 +1,22 @@
 /**
  * Next version
  * @module next-version
- * @version 0.11.0
- * node task/version major=1 minor
+ * @version 0.11.2
  */
 var fs = require('fs')
+    /**
+     * Options
+     * @typedef {object} options
+     * @property {boolean|number} [major=false]
+     * @property {boolean|number} [minor=false]
+     * @property {boolean|number} [patch=false]
+     * @property {string} [version=false]
+     * @property {string} [release=false]
+     * @property {string} [build=false]
+     * @property {boolean} [git=false]
+     * @property {boolean|number} [gitRevision=false]
+     * @property {RegExp} [regex=/\d+\.\d+\.\d+-?[0-9A-Za-z-.]*\+?[0-9A-Za-z-.]*\/]
+     */
     ,defaultOptions = {
         major: false
         ,minor: false
@@ -21,7 +33,7 @@ var fs = require('fs')
 /**
  *
  * @param {string[]} files
- * @param {object} [options]
+ * @param {options} [options]
  * @param {function} callback
  */
 function nextVersion(files,options,callback){

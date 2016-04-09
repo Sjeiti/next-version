@@ -1,12 +1,16 @@
 # next-version
 Change version numbers in multiple files using semver.
 
-## Next version
+Checks the highest version number in the specified files and changes all to the highest number.
+It can bump major, minor or patch following semver.
+It can append a release and/or build suffix.
+Build number can also be extracted from the number of Git commits.
 
-This module changes version numbers in files, including the option to change the build number to the number of Git commits.
-The module can make use of the `git` command and expects it to be globally installed.
+It can even bump itself!
 
-```
+## Javascript
+
+```Javascript
 var version = require('next-version');
 version(files,options,callback);
 ```
@@ -37,8 +41,14 @@ Appends a build number based on the number of GIT commits, ie: v1.2.3+897.
 Type: `Regexp|Regexp[]`
 Default value: `/\d+\.\d+\.\d+/`
 
+### examples
 
-### CLI
+```Javascript
+var version = require('next-version');
+version(['foo.txt','bar.txt'],{minor:true},console.log.bind(console,'done');
+```
+
+## CLI
 
 Usage: `next-version [options] <files ...>`
 
@@ -53,7 +63,7 @@ Options:
   -g, --git                Git revision number as build number
   -r, --regex [regex]      Regex to find version number with
 
-#### CLI examples
+### examples
 
 `next-version --major=3 foo.js bar.js`
 

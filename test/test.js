@@ -10,6 +10,7 @@ var assert = require('assert')
       ['foo.txt','0.1.0']
       ,['bar.txt','0.8.2']
       ,['baz.txt','1.0.1']
+      ,['qux.txt','0.7.3-alpha+2349']
     ].map(file=>({
       name: file[0]
       ,path: tempRoot+file[0]
@@ -82,6 +83,30 @@ describe('Module', function() {
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
           .then(results=>results.forEach(result=>assert.equal(result,'1.0.1-alpha')),warn)
+          .then(done,done);
+      });
+    });
+    it('should add revision suffix and bump patch', function(done) {
+      version(paths,{git:true,patch:true},err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal((/1\.0\.2\+\d+/).test(result),true)),warn)
+          .then(done,done);
+      });
+    });
+    it('should set build suffix', function(done) {
+      version(paths,{build:2345},err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.0.1+2345')),warn)
+          .then(done,done);
+      });
+    });
+    it('should set release and build', function(done) {
+      version(paths,{release:'alpha',build:2345},err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.0.1-alpha+2345')),warn)
           .then(done,done);
       });
     });
@@ -165,6 +190,14 @@ describe('CLI', function() {
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
           .then(results=>results.forEach(result=>assert.equal(result,'1.0.1+2345')),warn)
+          .then(done,done);
+      });
+    });
+    it('should set release and build', function(done) {
+      exec(cliLocal+pathsJoined+' --release=alpha --build=2345',err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'1.0.1-alpha+2345')),warn)
           .then(done,done);
       });
     });
