@@ -1,7 +1,7 @@
 /**
  * Next version
  * @module next-version
- * @version 0.11.2
+ * @version 0.11.7
  */
 var fs = require('fs')
     /**
@@ -87,7 +87,7 @@ function iterateFiles(files,options){
         if (!isBool(options.minor)) versionNewSplit[1] = options.minor;
         if (!isBool(options.patch)) versionNewSplit[2] = options.patch;
       }
-      versionNew = versionNewSplit.join('.');
+      versionNew = options.version||versionNewSplit.join('.');
       // add release
       if (options.release) {
         versionNew = versionNew+'-'+options.release;

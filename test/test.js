@@ -76,6 +76,14 @@ describe('Module', function() {
           .then(done,done);
       });
     });
+    it('should set version', function(done) {
+      version(paths,{version:'6.5.4'},err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'6.5.4')),warn)
+          .then(done,done);
+      });
+    });
   });
   describe('build', function () {
     it('should set release suffix', function(done) {
@@ -164,6 +172,14 @@ describe('CLI', function() {
         assert.equal(!!err,false);
         Promise.all(files.map(file=>read(file.path)))
           .then(results=>results.forEach(result=>assert.equal(result,'4.0.1')),warn)
+          .then(done,done);
+      });
+    });
+    it('should set version', function(done) {
+      exec(cliLocal+pathsJoined+' --version=6.5.4',err=>{
+        assert.equal(!!err,false);
+        Promise.all(files.map(file=>read(file.path)))
+          .then(results=>results.forEach(result=>assert.equal(result,'6.5.4')),warn)
           .then(done,done);
       });
     });
