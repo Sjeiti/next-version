@@ -54,14 +54,14 @@ Usage: `next-version [options] <files ...>`
 
 Options:
 
-  -h, --help               output usage information
-  -m, --major [major]      Bump or set major version
-  -i, --minor [minor]      Bump or set minor version
-  -p, --patch [patch]      Bump or set patch version
-  -v, --version [version]  Set the full version number
-  -b, --build [build]      The build number
-  -g, --git                Git revision number as build number
-  -r, --regex [regex]      Regex to find version number with
+-h, --help               output usage information  
+-m, --major [major]      Bump or set major version  
+-i, --minor [minor]      Bump or set minor version  
+-p, --patch [patch]      Bump or set patch version  
+-v, --version [version]  Set the full version number  
+-b, --build [build]      The build number  
+-g, --git                Git revision number as build number  
+-r, --regex [regex]      Regex to find version number with
 
 ### examples
 
