@@ -1,7 +1,7 @@
 /**
  * Next version
  * @module next-version
- * @version 0.11.7
+ * @version 0.11.8
  */
 var fs = require('fs')
     /**
